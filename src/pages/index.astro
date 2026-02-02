@@ -26,8 +26,8 @@ import {
 
 const env = import.meta.env;
 const API_KEY = env.OPENWEATHERMAP_API_KEY; 
-const lat = env.LAT
-const lon = env.LON
+//const lat = env.LAT
+//const lon = env.LON
 const city = env.CITY
 const country = env.COUNTRY
 //console.log("lat: ", lat);
@@ -35,8 +35,8 @@ const country = env.COUNTRY
 //console.log("city: ", city);
 //console.log("country: ", country);
 
-Astro.cookies.set("lat", lat);
-Astro.cookies.set("lon", lon);
+//Astro.cookies.set("lat", lat);
+//Astro.cookies.set("lon", lon);
 Astro.cookies.set("city", city);
 Astro.cookies.set("country", country);
 
@@ -76,7 +76,7 @@ const insideResponse = await fetch (
 	'http://hap-nodejs:8080/dbquery?source=WeatherNode2'
 );
 const insideData = await insideResponse.json();
-console.log(insideData);
+//console.log(insideData);
 
 const inside2Response = await fetch (
 	'http://hap-nodejs:8080/dbquery?source=WeatherNode3'
