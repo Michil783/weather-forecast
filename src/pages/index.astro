@@ -1,0 +1,367 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import DatetimeCard from "@/components/Datetime.astro"
+import OutsideCard from "@/components/OutsideCard.astro"
+import CommonCard from "@/components/CommonCard.astro"
+import InsideCard from "@/components/InsideCard.astro"
+import SingleWeatherCard from "@/components/SingleWeatherCard.astro";
+import WeatherChart from "@/components/WeatherChart.jsx";
+//import WeatherChart_new from "@/components/WeatherChart_new.jsx";
+import {
+	IconSunrise,
+	IconSunset,
+	IconTemperaturePlus,
+	IconTemperatureMinus,
+	IconWindsockFilled,
+	IconDroplet,
+	IconGauge, 
+	IconUvIndex,
+	IconBinoculars,
+	IconCloud,
+	IconBattery1Filled,
+	IconBattery2Filled,
+	IconBattery3Filled,
+	IconBattery4Filled,
+} from "@tabler/icons-react";
+
+const env = import.meta.env;
+const API_KEY = env.OPENWEATHERMAP_API_KEY; 
+const lat = env.LAT
+const lon = env.LON
+const city = env.CITY
+const country = env.COUNTRY
+//console.log("lat: ", lat);
+//console.log("lon: ", lon);
+//console.log("city: ", city);
+//console.log("country: ", country);
+
+Astro.cookies.set("lat", lat);
+Astro.cookies.set("lon", lon);
+Astro.cookies.set("city", city);
+Astro.cookies.set("country", country);
+
+/*
+const latCookie = Astro.cookies.get("lat");
+const lonCookie = Astro.cookies.get("lon");
+const cityCookie = Astro.cookies.get("city");
+
+const lat = latCookie?.value;
+const lon = lonCookie?.value;
+const city = cityCookie?.value;
+
+if (!lat || !lon) {
+	//return Astro.redirect("/setup");
+}
+*/
+
+const currentWeatherResponse = await fetch(
+	//`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=DE&units=metric&appid=${API_KEY}`
+	`https://api.openweathermap.org/data/2.5/weather?zip=${city},${country}&lang=DE&units=metric&appid=${API_KEY}`
+);
+const currentWeather = await currentWeatherResponse.json();
+
+const forecastResponse = await fetch(
+	//`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&lang=DE&units=metric&appid=${API_KEY}`
+	`https://api.openweathermap.org/data/2.5/forecast?zip=${city},${country}&lang=DE&units=metric&appid=${API_KEY}`
+);
+const forecastData = await forecastResponse.json();
+//console.log(forecastData);
+
+const outsideResponse = await fetch (
+	'http://hap-nodejs:8080/dbquery?source=WeatherNode1'
+);
+const outsideData = await outsideResponse.json();
+
+const insideResponse = await fetch (
+	'http://hap-nodejs:8080/dbquery?source=WeatherNode2'
+);
+const insideData = await insideResponse.json();
+console.log(insideData);
+
+const inside2Response = await fetch (
+	'http://hap-nodejs:8080/dbquery?source=WeatherNode3'
+);
+const inside2Data = await inside2Response.json();
+
+const time = new Date();
+const currentDate = time.toLocaleDateString("de-DE", { 
+	timeZone: "Europe/Berlin",
+	weekday: "long",
+	month: "long",
+	day: "numeric",
+	//hour: "2-digit",
+	//minute: "2-digit",
+	//hour12: false,
+});
+const currentTime = time.toLocaleTimeString("de-DE", {
+	hour: "2-digit",
+	minute: "2-digit",
+	hour12: false,
+})
+const currentTimeHour = time.toLocaleTimeString("de-DE", {
+	timeZone: "Europe/Berlin",
+	hour: "2-digit",
+	hour12: false,
+}).substring(0,2);
+//console.log("currentTimeHour: \"",currentTimeHour,"\" (\"",currentTimeHour.substring(0,2),"\")");
+
+const currentTimeMinute = time.toLocaleTimeString("de-DE", {
+	timeZone: "Europe/Berlin",
+	minute: "2-digit",
+	hour12: false,
+});
+
+function formatToDayAndTime(unixTimestamp) {
+    const date = new Date(unixTimestamp * 1000);
+    const day = date.toLocaleDateString("de-DE", { 
+        timeZone: "Europe/Berlin",
+        weekday: "short"//"narrow",
+    });
+    const time = date.toLocaleTimeString("de-DE", { 
+        timeZone: "Europe/Berlin",
+        hour: "2-digit",
+        hour12: false,
+    });
+    return `${day} ${time}`;
+}
+
+function formatToBerlinDate(unixTimestamp) {
+	const date = new Date(unixTimestamp * 1000); 
+	return date.toLocaleDateString("de-DE", { 
+		timeZone: "Europe/Berlin",
+		weekday: "long",
+	});
+}
+
+const hourlyChartLabels = forecastData.list.map((h) =>
+	formatToDayAndTime(h.dt) 
+);
+const hourlyTemperatures = forecastData.list.map((h) => Math.round(h.main.temp));
+const hourlyPrecipitation = forecastData.list.map((h) => {
+	return (h.rain && h.rain["3h"]) ? h.rain["3h"] : 0;
+});
+
+const hourlyAirPressure = forecastData.list.map((h) => h.main.pressure);
+
+//const hourlyDataForMinMax = forecastData.list.slice(0, 8); 
+//const currentDayMinTemp = Math.min(...hourlyDataForMinMax.map(h => h.main.temp));
+//const currentDayMaxTemp = Math.max(...hourlyDataForMinMax.map(h => h.main.temp));
+
+function matchCriteria(element, index, array) {
+	const value =  element.dt_txt.includes("12:00:00");
+	return value;
+}
+//const dailyWeather = forecastData.list.filter(item => item.dt_txt.includes("12:00:00"));
+const dailyWeather = forecastData.list.filter(matchCriteria);
+//console.log(DailyWeather);
+
+const hour = new Date().toLocaleTimeString("de-DE", {
+	timeZone: "Europe/Berlin",
+	hour: "2-digit",
+	hour12: false,
+});
+const hourNumber = parseInt(hour, 10);
+const isNight = hourNumber >= 20 || hourNumber < 6;
+//const isNight = true;
+
+const colors = [
+	"text-red-950", "text-orange-950", "text-amber-950", "text-yellow-950", "text-lime-950", "text-green-950", 
+	"text-emerald-950", "text-teal-950", "text-cyan-950", "text-sky-950", "text-blue-950", "text-indigo-950", 
+	"text-violet-950", "text-purple-950", "text-fuchsia-950", "text-pink-950", "text-rose-950", "text-slate-950", 
+	"text-gray-950", "text-zinc-950", "text-neutral-950", "text-stone-950",
+];
+const darkColors = [
+	"text-red-100", "text-orange-100", "text-amber-100", "text-yellow-100", "text-lime-100", "text-green-100", 
+	"text-emerald-100", "text-teal-100", "text-cyan-100", "text-sky-100", "text-blue-100", "text-indigo-100", 
+	"text-violet-100", "text-purple-100", "text-fuchsia-100", "text-pink-100", "text-rose-100", "text-slate-100", 
+	"text-gray-100", "text-zinc-100", "text-neutral-100", "text-stone-100",
+];
+
+const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 265.755)";
+---
+
+<Layout>
+	<main
+		class="flex flex-col items-center h-screen w-full"
+		style={{
+			backgroundColor: isNight ? "#111927" : "#fdfdfd",
+			//backgroundImage: isNight
+			//	? `radial-gradient(at 50% 50%, hsl(200, 77%, 50%) 0px, transparent 59%),
+            // radial-gradient(at 82% 65%, hsl(218, 39%, 11%) 0px, transparent 55%)`
+			//	: `radial-gradient(at 50% 50%, hsl(45, 100%, 80%) 0px, transparent 59%),
+            // radial-gradient(at 82% 65%, #f5f5f4 0px, transparent 55%)`,
+		}}>
+		<div class="flex flex-col gap-4 w-full">
+			<!-- date and time  -->
+			<!--<section class="w-full max-w-[1475px] items-center mt-5 mx-auto">-->
+			<section class="w-full max-w-98/100 items-center gap-4 mt-5 mx-auto">
+				<DatetimeCard 
+					currentDate = {currentDate}
+					currentTime = {currentTime}
+					currentHour = {currentTimeHour}
+					currentMinute = {currentTimeMinute}
+					isNight = {isNight}
+				/>
+			</section>
+
+			<!-- outside, common, inside -->
+			<section class="grid grid-cols-7 w-full max-w-98/100 items-center gap-4 mx-auto">
+				<!-- Outside -->
+				<OutsideCard
+					outsideData = {outsideData}
+					isNight = {isNight}
+				/>
+
+				<!-- common -->
+				<CommonCard
+					currentWeather = {currentWeather}
+					isNight = {isNight}
+				/>
+
+				<!-- inside -->
+				<InsideCard
+					insideData = {insideData}
+					inside2Data = {inside2Data}
+					isNight = {isNight}
+				/>
+			</section>
+
+			<!-- weather details -->
+			<section
+				class:list={[
+					"w-full flex items-center justify-center shadow-md rounded-lg pl-4 pr-4 max-w-98/100 mx-auto backdrop-blur-lg backdrop-saturate-150 border",
+					{
+						[`bg-[rgba(17,25,39,0.5)] border-white/10 text-slate-100`]:
+							isNight,
+						[`bg-[rgba(245,245,244,0.75)] border-black/10 text-slate-900`]:
+							!isNight,
+					},
+				]}>
+				<WeatherChart
+					client:load
+					labels={hourlyChartLabels}
+					temperatureData={hourlyTemperatures}
+					precipitationData={hourlyPrecipitation}
+					airPressureData={hourlyAirPressure} 
+					textColor={textcolor}
+				/>
+			</section>
+
+			<!-- forecast -->
+			<section
+				class:list={[
+					"flex gap-4 justify-between w-full max-w-98/100 mx-auto shadow-md rounded-lg p-4 backdrop-blur-lg backdrop-saturate-150 border",
+					/*
+					{
+						[`bg-[rgba(17,25,39,0.5)] border-white/10 ${darkColors[Math.floor(Math.random() * darkColors.length)]}`]:
+							isNight,
+						[`bg-[rgba(245,245,244,0.75)] border-black/10 ${colors[Math.floor(Math.random() * colors.length)]}`]:
+							!isNight,
+						[`bg-[rgba(17,25,39,0.5)] border-white/10 ${darkColors[Math.floor(Math.random() * colors.length)]}`]:
+							isNight,
+						[`bg-[rgba(245,245,244,0.55)] border-black/10 ${colors[Math.floor(Math.random() * colors.length)]}`]:
+							!isNight,
+					},
+					*/
+					{
+						[`bg-[rgba(17,25,39,0.5)] border-white/10 text-slate-100`]:
+							isNight,
+						[`bg-[rgba(245,245,244,0.75)] border-black/10 text-slate-900`]:
+							!isNight,
+					},
+				]}>
+				{
+					dailyWeather
+						.map((item) => (
+							<SingleWeatherCard
+								title={formatToBerlinDate(item.dt)}
+								temperature={Math.round(item.main.temp)}
+								humidity={item.main.humidity}
+								pressure={item.main.pressure}
+								icon={item.weather[0].icon}
+								isNight={isNight}
+								textColor={
+									isNight
+										? "text-slate-100"
+										: "text-slate-900"
+								}
+							/>
+						))
+				}
+			</section>
+		</div>
+
+		<!--
+		<p id="countdown" class="absolute left-4 bottom-4 text-slate-900">
+			15:00
+		</p>
+		-->
+
+		<script define:vars={{ textcolor }}>
+			let seconds = 900;
+			const countdownEl = document.getElementById("countdown");
+			const dateEl = document.getElementById("date");
+			const timeHourEl = document.getElementById("hour");
+			const timeMinuteEl = document.getElementById("minute");
+			const datetimeSeparatorEl = document.getElementById("timeseparator");
+			console.log("textcolor=",textcolor);
+
+			function updateDatetime() {
+				const time = new Date();
+				const currentDate = time.toLocaleDateString("de-DE", { 
+					timeZone: "Europe/Berlin",
+					weekday: "long",
+					month: "long",
+					day: "numeric",
+				});
+				const currentTimeHour = time.toLocaleTimeString("de-DE", {
+					hour: "2-digit",
+					//minute: "2-digit",
+					//second: "2-digit",
+					hour12: false,
+				}).substring(0,2).padStart(2, '0');
+				//console.log("currentTimeHour: ",currentTimeHour);
+				const currentTimeMinute = time.toLocaleTimeString("de-DE", {
+					//hour: "2-digit",
+					minute: "2-digit",
+					//second: "2-digit",
+					hour12: false,
+				}).padStart(2, '0');
+				//console.log("currentTimeMinute: ",currentTimeMinute);
+				if (seconds % 2 == 0) {
+					datetimeSeparatorEl.style.color = textcolor;//(isNight ? "white" : "black");
+					dateEl.textContent = `${currentDate}`;
+					timeHourEl.textContent = `${currentTimeHour}`;
+					timeMinuteEl.textContent = `${currentTimeMinute}`;
+				} else {
+					datetimeSeparatorEl.style.color = "transparent";
+				}
+				//datetimeEl.textContent = `${currentDate} ${currentTime}`;
+				//if (seconds % 2 == 0) {
+				//	datetimeEl.textContent = `${currentDate} ${currentTime}`;
+				//} else {
+				//	datetimeEl.textContent = `${currentDate} ${currentTime}`;
+				//}
+			}
+			//updateDatetime();
+			/*
+			function updateCountdown() {
+				const min = Math.floor(seconds / 60);
+				const sec = seconds % 60;
+				countdownEl.textContent = `${min}:${sec.toString().padStart(2, "0")}`;
+			}
+			updateCountdown();
+			*/
+			const interval = setInterval(() => {
+				seconds--;
+				//updateCountdown();
+				updateDatetime();
+				if (seconds <= 0) {
+					clearInterval(interval);
+					window.location.reload();
+					console.log("Reloading...");
+				}
+			}, 1000);
+		</script>
+	</main>
+</Layout>

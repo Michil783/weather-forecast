@@ -1,0 +1,28 @@
+---
+const {
+	currentDate,
+	currentTime,
+    currentHour,
+    currentMinute,
+    currentSeparator=":",
+    isNight,
+} = Astro.props;
+---
+
+<div
+    class:list={[
+        "flex items-center gap-16 shadow-md rounded-lg pb-4 backdrop-blur-lg backdrop-saturate-150 border h-full justify-center-safe",
+        {
+            [`bg-[rgba(17,25,39,0.5)] border-white/10 text-slate-100`]:
+                isNight,
+            [`bg-[rgba(245,245,244,0.75)] border-black/10 text-slate-900`]:
+                !isNight,
+        },
+    ]}>
+    <div class="">
+        <p id="datetime" class="text-9xl font-semibold">
+            <span id="date">{currentDate}</span> <span id="hour">{currentHour}</span><span id="timeseparator">{currentSeparator}</span><span id="minute">{currentMinute}</span>
+        </p>
+    </div>
+</div>
+

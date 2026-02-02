@@ -1,0 +1,82 @@
+---
+import { Image } from "astro:assets"
+import icon01d from "../assets/01d.png"
+import icon01n from "../assets/01n.png"
+import icon02d from "../assets/02d.png"
+import icon02n from "../assets/02n.png"
+import icon03d from "../assets/03d.png"
+import icon03n from "../assets/03n.png"
+import icon04d from "../assets/04d.png"
+import icon04n from "../assets/04n.png"
+import icon10d from "../assets/10d.png"
+import icon10n from "../assets/10n.png"
+import icon11d from "../assets/11d.png"
+import icon11n from "../assets/11n.png"
+import icon13d from "../assets/13d.png"
+import icon13n from "../assets/13n.png"
+import icon50d from "../assets/50d.png"
+import icontwc from "../assets/TWC.png"
+
+const {
+	title,
+	description,
+	temperature,
+	pressure = null,
+	icon = null,
+	humidity = null,
+	textColor = null,
+} = Astro.props;
+
+//console.log("icon=",icon)
+var currentIcon = icontwc
+if (icon=="01d") {
+	currentIcon = icon01d
+} else if (icon=="01n") {
+	currentIcon = icon01n
+} else if (icon=="02d") {
+	currentIcon = icon02d
+} else if (icon=="02n") {
+	currentIcon = icon02n
+} else if (icon=="03d") {
+	currentIcon = icon03d
+} else if (icon=="03n") {
+	currentIcon = icon03n
+} else if (icon=="04d") {
+	currentIcon = icon04d
+} else if (icon=="04n") {
+	currentIcon = icon04n
+} else if (icon=="10d") {
+	currentIcon = icon10d
+} else if (icon=="10n") {
+	currentIcon = icon10n
+} else if (icon=="11d") {
+	currentIcon = icon11d
+} else if (icon=="11n") {
+	currentIcon = icon11n
+} else if (icon=="13d") {
+	currentIcon = icon13d
+} else if (icon=="13n") {
+	currentIcon = icon13n
+}
+---
+
+<div
+	class=`duration-300 font-mono overflow-hidden bg-transparent ${textColor}`>
+	<h3 class="text-3xl text-center font-semibold">{title}</h3>
+	<div class="relative">
+		<!--
+		<img
+			src=`https://openweathermap.org/img/wn/${icon}@4x.png`
+			alt=""
+			class="size-44 -mt-8"
+		/>
+		-->
+		<Image src={currentIcon} alt="" class="size-60 -mt-8 p-4"/>
+		<h4
+			class="font-sans text-2xl text-center -mt-8 font-bold">
+			{temperature}°C
+			<br>
+			{pressure}hPa
+		</h4>
+	</div>
+</div>

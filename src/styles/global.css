@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+html, 
+body {
+  background-color: #475569 !important;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+main, 
+#root, 
+#__next,
+div[class*="bg-white"], 
+div[class*="bg-slate-"], 
+div[class*="bg-gray-"] {
+  background-color: #475569 !important;
+}
+
+input, 
+select, 
+textarea, 
+button {
+  background-color: white !important; 
+  color: black !important;           
+  border: 1px solid #94a3b8 !important;
+  border-radius: 4px !important;
+  padding: 8px !important;
+  position: relative !important;
+  z-index: 10 !important;           
+  pointer-events: auto !important;    
+}
+
+button {
+  background-color: #1e293b !important;
+  color: white !important;
+  cursor: pointer !important;
+}
+
+button:hover {
+  background-color: #0f172a !important;
+}

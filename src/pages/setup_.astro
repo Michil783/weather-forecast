@@ -1,0 +1,90 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout>
+	<main
+		class="flex flex-col items-center justify-center h-screen w-full bg-gray-50 text-gray-900">
+		<form
+			id="location-form"
+			class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md space-y-6">
+			<h1 class="text-2xl font-bold">Standort einrichten</h1>
+
+			<label class="block">
+				<span class="text-sm font-medium">Breitengrad (Latitude)</span>
+				<input
+					id="lat"
+					name="lat"
+					type="number"
+					step="any"
+					class="w-full mt-1 p-2 border border-gray-300 rounded"
+				/>
+			</label>
+
+			<label class="block">
+				<span class="text-sm font-medium">Längengrad (Longitude)</span>
+				<input
+					id="lon"
+					name="lon"
+					type="number"
+					step="any"
+					class="w-full mt-1 p-2 border border-gray-300 rounded"
+				/>
+			</label>
+
+			<!-- or -->
+
+			<hr class="text-gray-300 mt-8" />
+
+			<label class="block">
+				<span class="text-sm font-medium">Stadt/PLZ (City/ZIP)</span>
+				<input
+					id="city"
+					name="city"
+					type="text"
+					class="w-full mt-1 p-2 border border-gray-300 rounded"
+				/>
+			</label>
+
+			<button
+				type="submit"
+				class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700">
+				Speichern & Starten
+			</button>
+		</form>
+
+		<script type="module">
+			const form = document.getElementById("location-form");
+
+			form.addEventListener("submit", async (e) => {
+				e.preventDefault();
+
+				const lat = document.getElementById("lat").value;
+				const lon = document.getElementById("lon").value;
+				const other = document.getElementById("city").value;
+
+				// Send data to your API using fetch
+				const res = await fetch("/api/set-location", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ lat, lon, other }),
+				});
+
+				if (!res.ok) {
+					alert("Fehler beim Speichern der Position");
+					return;
+				}
+
+				// Fullscreen
+				if (document.documentElement.requestFullscreen) {
+					await document.documentElement.requestFullscreen();
+				}
+
+				// Navigate to homepage
+				window.location.href = "/";
+			});
+		</script>
+	</main>
+</Layout>

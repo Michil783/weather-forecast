@@ -1,0 +1,101 @@
+---
+import {
+	IconSunrise,
+	IconSunset,
+	IconWindsockFilled,
+	IconBinoculars,
+	IconCloud,
+} from "@tabler/icons-react";
+
+const {
+	currentWeather,
+    isNight,
+} = Astro.props;
+
+function formatToBerlinTime(unixTimestamp) {
+	const date = new Date(unixTimestamp * 1000);
+	return date.toLocaleTimeString("de-DE", { 
+		timeZone: "Europe/Berlin",
+		hour: "2-digit",
+		minute: "2-digit",
+		hour12: false,
+	});
+}
+
+function meterToKm(m) {
+	//console.log("meterToKm(%d)", m)
+	return Math.round(m / 1000);
+}
+---
+
+<div
+    class:list={[
+        "grid grid-cols-2 grid-rows-3 text-l font-semibold gap-x-4 gap-y-4 p-2 shadow-md rounded-lg backdrop-blur-lg backdrop-saturate-150 border h-full",
+        {
+            [`bg-[rgba(17,25,39,0.5)] border-white/10 text-slate-100`]:
+                isNight,
+            [`bg-[rgba(245,245,244,0.75)] border-black/10 text-slate-900`]:
+                !isNight,
+        },
+    ]}>
+    <!-- sunrise -->
+    <div class="flex items-center">
+        <span><IconSunrise size={25} /></span>
+        <div class="flex flex-col justify-center items-center w-full">
+            <!--Sonnenaufgang:-->
+            <span class="text-xl font-bold">
+                {formatToBerlinTime(currentWeather.sys.sunrise)}
+            </span>
+        </div>
+    </div>
+    <!-- sunset -->
+    <div class="flex items-center">
+        <span><IconSunset size={25} /></span>
+        <div
+            class="flex flex-col justify-center items-center w-full">
+            <!--Sonnenuntergang: -->
+            <span class="text-xl font-bold">
+                {formatToBerlinTime(currentWeather.sys.sunset)}
+            </span>
+        </div>
+    </div>
+    <!-- wind -->
+    <div class="flex items-center">
+        <span><IconWindsockFilled size={25} /></span>
+        <div
+            class="flex flex-col justify-center items-center w-full">
+            Wind: 
+            <span class="text-xl font-bold">
+                {currentWeather.wind.speed}<span
+                    class="text-xl">m/s</span
+                >
+            </span>
+        </div>
+    </div>
+    <!-- visibility -->
+    <div class="flex items-center">
+        <span><IconBinoculars size={25} /></span>
+        <div
+            class="flex flex-col justify-center items-center w-full">
+            Sicht: 
+            <span class="text-xl font-bold">
+                {meterToKm(currentWeather.visibility)}<span
+                    class="text-xl">km</span
+                >
+            </span>
+        </div>
+    </div>
+    <!-- clouds -->
+    <div class="flex items-center">
+        <span><IconCloud size={25} /></span>
+        <div
+            class="flex flex-col justify-center items-center w-full">
+            Wolken: 
+            <span class="text-xl font-bold">
+                {currentWeather.clouds.all}<span
+                    class="text-xl">%</span
+                >
+            </span>
+        </div>
+    </div>
+</div>
