@@ -6,7 +6,6 @@ import CommonCard from "@/components/CommonCard.astro"
 import InsideCard from "@/components/InsideCard.astro"
 import SingleWeatherCard from "@/components/SingleWeatherCard.astro";
 import WeatherChart from "@/components/WeatherChart.jsx";
-//import WeatherChart_new from "@/components/WeatherChart_new.jsx";
 import {
 	IconSunrise,
 	IconSunset,
@@ -26,60 +25,41 @@ import {
 
 const env = import.meta.env;
 const API_KEY = env.OPENWEATHERMAP_API_KEY; 
-//const lat = env.LAT
-//const lon = env.LON
 const city = env.CITY
 const country = env.COUNTRY
-//console.log("lat: ", lat);
-//console.log("lon: ", lon);
-//console.log("city: ", city);
-//console.log("country: ", country);
+const weathernode1 = env.WEATHERNODE1;
+const weathernode2 = env.WEATHERNODE2;
+const weathernode3 = env.WEATHERNODE3;
 
-//Astro.cookies.set("lat", lat);
-//Astro.cookies.set("lon", lon);
 Astro.cookies.set("city", city);
 Astro.cookies.set("country", country);
-
-/*
-const latCookie = Astro.cookies.get("lat");
-const lonCookie = Astro.cookies.get("lon");
-const cityCookie = Astro.cookies.get("city");
-
-const lat = latCookie?.value;
-const lon = lonCookie?.value;
-const city = cityCookie?.value;
-
-if (!lat || !lon) {
-	//return Astro.redirect("/setup");
-}
-*/
+Astro.cookies.set("weathernode1", weathernode1);
+Astro.cookies.set("weathernode2", weathernode2);
+Astro.cookies.set("weathernode3", weathernode3);
 
 const currentWeatherResponse = await fetch(
-	//`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=DE&units=metric&appid=${API_KEY}`
 	`https://api.openweathermap.org/data/2.5/weather?zip=${city},${country}&lang=DE&units=metric&appid=${API_KEY}`
 );
 const currentWeather = await currentWeatherResponse.json();
 
 const forecastResponse = await fetch(
-	//`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&lang=DE&units=metric&appid=${API_KEY}`
 	`https://api.openweathermap.org/data/2.5/forecast?zip=${city},${country}&lang=DE&units=metric&appid=${API_KEY}`
 );
 const forecastData = await forecastResponse.json();
-//console.log(forecastData);
 
 const outsideResponse = await fetch (
-	'http://hap-nodejs:8080/dbquery?source=WeatherNode1'
+	`${weathernode1}`
 );
 const outsideData = await outsideResponse.json();
 
 const insideResponse = await fetch (
-	'http://hap-nodejs:8080/dbquery?source=WeatherNode2'
+	`${weathernode2}`
 );
 const insideData = await insideResponse.json();
 //console.log(insideData);
 
 const inside2Response = await fetch (
-	'http://hap-nodejs:8080/dbquery?source=WeatherNode3'
+	`${weathernode3}`
 );
 const inside2Data = await inside2Response.json();
 
@@ -97,13 +77,12 @@ const currentTime = time.toLocaleTimeString("de-DE", {
 	hour: "2-digit",
 	minute: "2-digit",
 	hour12: false,
-})
+});
 const currentTimeHour = time.toLocaleTimeString("de-DE", {
 	timeZone: "Europe/Berlin",
 	hour: "2-digit",
 	hour12: false,
 }).substring(0,2);
-//console.log("currentTimeHour: \"",currentTimeHour,"\" (\"",currentTimeHour.substring(0,2),"\")");
 
 const currentTimeMinute = time.toLocaleTimeString("de-DE", {
 	timeZone: "Europe/Berlin",
@@ -143,17 +122,11 @@ const hourlyPrecipitation = forecastData.list.map((h) => {
 
 const hourlyAirPressure = forecastData.list.map((h) => h.main.pressure);
 
-//const hourlyDataForMinMax = forecastData.list.slice(0, 8); 
-//const currentDayMinTemp = Math.min(...hourlyDataForMinMax.map(h => h.main.temp));
-//const currentDayMaxTemp = Math.max(...hourlyDataForMinMax.map(h => h.main.temp));
-
 function matchCriteria(element, index, array) {
-	const value =  element.dt_txt.includes("12:00:00");
+	const value =  element.dt_txt.includes("12:00:00") || element.dt_txt.includes("06:00:00") || element.dt_txt.includes("18:00:00");
 	return value;
 }
-//const dailyWeather = forecastData.list.filter(item => item.dt_txt.includes("12:00:00"));
-const dailyWeather = forecastData.list.filter(matchCriteria);
-//console.log(DailyWeather);
+const dailyWeather = forecastData.list.filter(matchCriteria).slice(0,8);
 
 const hour = new Date().toLocaleTimeString("de-DE", {
 	timeZone: "Europe/Berlin",
@@ -162,7 +135,6 @@ const hour = new Date().toLocaleTimeString("de-DE", {
 });
 const hourNumber = parseInt(hour, 10);
 const isNight = hourNumber >= 20 || hourNumber < 6;
-//const isNight = true;
 
 const colors = [
 	"text-red-950", "text-orange-950", "text-amber-950", "text-yellow-950", "text-lime-950", "text-green-950", 
@@ -278,6 +250,7 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 								temperature={Math.round(item.main.temp)}
 								humidity={item.main.humidity}
 								pressure={item.main.pressure}
+								time={item.dt_txt}
 								icon={item.weather[0].icon}
 								isNight={isNight}
 								textColor={
@@ -291,11 +264,9 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 			</section>
 		</div>
 
-		<!--
-		<p id="countdown" class="absolute left-4 bottom-4 text-slate-900">
-			15:00
+		<p class="absolute left-4 bottom-4 text-slate-900">
+			&copy; 2026 Michael Leopoldseder
 		</p>
-		-->
 
 		<script define:vars={{ textcolor }}>
 			let seconds = 900;

@@ -14,6 +14,7 @@ RUN apt-get install -yq tzdata
 RUN ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 RUN dpkg-reconfigure -f noninteractive tzdata
 RUN npm install
+RUN npx astro telemetry disable
 RUN npm run build
 
 ENV HOST=0.0.0.0
