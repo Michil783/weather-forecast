@@ -11,9 +11,7 @@ The sensors and their Software could be found here: https://github.com/Michil783
 
 The backoffice structure is here:
 
-https://github.com/Michil783/Store_MQTT_Data_in_Database
-
-https://github.com/Michil783/dhtWebHist
+https://github.com/Michil783/ClimateHist
 
 
 ## How to setup:
