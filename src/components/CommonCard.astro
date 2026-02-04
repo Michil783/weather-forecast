@@ -14,9 +14,6 @@ const {
     time = "",
 } = Astro.props;
 
-console.log(time);
-console.log(formatToDayAndTime(time));
-
 function formatToBerlinTime(unixTimestamp) {
 	const date = new Date(unixTimestamp * 1000);
 	return date.toLocaleTimeString("de-DE", { 
