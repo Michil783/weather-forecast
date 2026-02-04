@@ -64,6 +64,7 @@ const inside2Response = await fetch (
 const inside2Data = await inside2Response.json();
 
 const time = new Date();
+
 const currentDate = time.toLocaleDateString("de-DE", { 
 	timeZone: "Europe/Berlin",
 	weekday: "long",
@@ -188,6 +189,7 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 				<CommonCard
 					currentWeather = {currentWeather}
 					isNight = {isNight}
+					time = {time}
 				/>
 
 				<!-- inside -->
