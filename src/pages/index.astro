@@ -6,36 +6,20 @@ import CommonCard from "@/components/CommonCard.astro"
 import InsideCard from "@/components/InsideCard.astro"
 import SingleWeatherCard from "@/components/SingleWeatherCard.astro";
 import WeatherChart from "@/components/WeatherChart.jsx";
-import {
-	IconSunrise,
-	IconSunset,
-	IconTemperaturePlus,
-	IconTemperatureMinus,
-	IconWindsockFilled,
-	IconDroplet,
-	IconGauge, 
-	IconUvIndex,
-	IconBinoculars,
-	IconCloud,
-	IconBattery1Filled,
-	IconBattery2Filled,
-	IconBattery3Filled,
-	IconBattery4Filled,
-} from "@tabler/icons-react";
 
 const env = import.meta.env;
 const API_KEY = env.OPENWEATHERMAP_API_KEY; 
 const city = env.CITY
 const country = env.COUNTRY
-const weathernode1 = env.WEATHERNODE1;
-const weathernode2 = env.WEATHERNODE2;
-const weathernode3 = env.WEATHERNODE3;
+//const weathernode1 = env.WEATHERNODE1;
+//const weathernode2 = env.WEATHERNODE2;
+//const weathernode3 = env.WEATHERNODE3;
 
 Astro.cookies.set("city", city);
 Astro.cookies.set("country", country);
-Astro.cookies.set("weathernode1", weathernode1);
-Astro.cookies.set("weathernode2", weathernode2);
-Astro.cookies.set("weathernode3", weathernode3);
+//Astro.cookies.set("weathernode1", weathernode1);
+//Astro.cookies.set("weathernode2", weathernode2);
+//Astro.cookies.set("weathernode3", weathernode3);
 
 const currentWeatherResponse = await fetch(
 	`https://api.openweathermap.org/data/2.5/weather?zip=${city},${country}&lang=DE&units=metric&appid=${API_KEY}`
@@ -46,22 +30,6 @@ const forecastResponse = await fetch(
 	`https://api.openweathermap.org/data/2.5/forecast?zip=${city},${country}&lang=DE&units=metric&appid=${API_KEY}`
 );
 const forecastData = await forecastResponse.json();
-
-const outsideResponse = await fetch (
-	`${weathernode1}`
-);
-const outsideData = await outsideResponse.json();
-
-const insideResponse = await fetch (
-	`${weathernode2}`
-);
-const insideData = await insideResponse.json();
-//console.log(insideData);
-
-const inside2Response = await fetch (
-	`${weathernode3}`
-);
-const inside2Data = await inside2Response.json();
 
 const time = new Date();
 
@@ -181,7 +149,6 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 			<section class="grid grid-cols-7 w-full max-w-98/100 items-center gap-4 mx-auto">
 				<!-- Outside -->
 				<OutsideCard
-					outsideData = {outsideData}
 					isNight = {isNight}
 				/>
 
@@ -194,8 +161,6 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 
 				<!-- inside -->
 				<InsideCard
-					insideData = {insideData}
-					inside2Data = {inside2Data}
 					isNight = {isNight}
 				/>
 			</section>
@@ -268,11 +233,11 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 
 		<script define:vars={{ textcolor }}>
 			let seconds = 900;
-			const countdownEl = document.getElementById("countdown");
 			const dateEl = document.getElementById("date");
 			const timeHourEl = document.getElementById("hour");
 			const timeMinuteEl = document.getElementById("minute");
 			const datetimeSeparatorEl = document.getElementById("timeseparator");
+
 			console.log("textcolor=",textcolor);
 
 			function updateDatetime() {
@@ -305,30 +270,16 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 				} else {
 					datetimeSeparatorEl.style.color = "transparent";
 				}
-				//datetimeEl.textContent = `${currentDate} ${currentTime}`;
-				//if (seconds % 2 == 0) {
-				//	datetimeEl.textContent = `${currentDate} ${currentTime}`;
-				//} else {
-				//	datetimeEl.textContent = `${currentDate} ${currentTime}`;
-				//}
 			}
-			//updateDatetime();
-			/*
-			function updateCountdown() {
-				const min = Math.floor(seconds / 60);
-				const sec = seconds % 60;
-				countdownEl.textContent = `${min}:${sec.toString().padStart(2, "0")}`;
-			}
-			updateCountdown();
-			*/
 			const interval = setInterval(() => {
 				seconds--;
+				//countdownEl.textContent=seconds;
 				//updateCountdown();
 				updateDatetime();
 				if (seconds <= 0) {
 					clearInterval(interval);
 					window.location.reload();
-					console.log("Reloading...");
+					console.log("Reloading ...");
 				}
 			}, 1000);
 		</script>

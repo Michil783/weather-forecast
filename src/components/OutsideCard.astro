@@ -10,14 +10,19 @@ import {
 } from "@tabler/icons-react";
 
 const {
-	outsideData,
     isNight,
 } = Astro.props;
 
-//console.log("outsideData.temp: ", outsideData.temp, (outsideData.temp) >= 10 ? 3 : 2, parseFloat(outsideData.temp, (outsideData.temp >= 10) ? 3 : 2));
+const env = import.meta.env;
+const weathernode1 = env.WEATHERNODE1;
+const outsideResponse = await fetch (
+	`${weathernode1}`
+);
+const outsideData = await outsideResponse.json();
+console.log("load outside data")
 ---
 
-<div class:list={[
+<div id="outside" class:list={[
         "col-span-3 items-center gap-8 pt-4 shadow-md rounded-lg backdrop-blur-lg backdrop-saturate-150 border h-full justify-center",
         {
             [`bg-[rgba(17,25,39,0.5)] border-white/10 text-slate-100`]:

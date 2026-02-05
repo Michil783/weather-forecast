@@ -9,16 +9,27 @@ import {
 } from "@tabler/icons-react";
 
 const {
-	insideData,
-    inside2Data,
     isNight,
 } = Astro.props;
 
-//console.log("insideData.temp: ", insideData.temp, (insideData.temp) >= 10 ? 3 : 2, parseFloat(insideData.temp * 10.0 / 10.0, (insideData.temp >= 10) ? 3 : 2));
+const env = import.meta.env;
+const weathernode2 = env.WEATHERNODE2;
+const weathernode3 = env.WEATHERNODE3;
+
+const insideResponse = await fetch (
+	`${weathernode2}`
+);
+const insideData = await insideResponse.json();
+//console.log(insideData);
+
+const inside2Response = await fetch (
+	`${weathernode3}`
+);
+const inside2Data = await inside2Response.json();
 
 ---
 
-<div class:list={[
+<div id="inside" class:list={[
         "col-span-3 items-center gap-8 shadow-md rounded-lg pt-4 backdrop-blur-lg backdrop-saturate-150 border h-full justify-center",
         {
             [`bg-[rgba(17,25,39,0.5)] border-white/10 text-slate-100`]:
