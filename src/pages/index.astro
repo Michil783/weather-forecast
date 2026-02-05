@@ -11,15 +11,9 @@ const env = import.meta.env;
 const API_KEY = env.OPENWEATHERMAP_API_KEY; 
 const city = env.CITY
 const country = env.COUNTRY
-//const weathernode1 = env.WEATHERNODE1;
-//const weathernode2 = env.WEATHERNODE2;
-//const weathernode3 = env.WEATHERNODE3;
 
 Astro.cookies.set("city", city);
 Astro.cookies.set("country", country);
-//Astro.cookies.set("weathernode1", weathernode1);
-//Astro.cookies.set("weathernode2", weathernode2);
-//Astro.cookies.set("weathernode3", weathernode3);
 
 const currentWeatherResponse = await fetch(
 	`https://api.openweathermap.org/data/2.5/weather?zip=${city},${country}&lang=DE&units=metric&appid=${API_KEY}`
@@ -38,9 +32,6 @@ const currentDate = time.toLocaleDateString("de-DE", {
 	weekday: "long",
 	month: "long",
 	day: "numeric",
-	//hour: "2-digit",
-	//minute: "2-digit",
-	//hour12: false,
 });
 const currentTime = time.toLocaleTimeString("de-DE", {
 	hour: "2-digit",
@@ -59,7 +50,7 @@ const currentTimeMinute = time.toLocaleTimeString("de-DE", {
 	hour12: false,
 });
 
-function formatToDayAndTime(unixTimestamp) {
+function formatToDayAndTime(unixTimestamp : number) {
     const date = new Date(unixTimestamp * 1000);
     const day = date.toLocaleDateString("de-DE", { 
         timeZone: "Europe/Berlin",
@@ -73,7 +64,7 @@ function formatToDayAndTime(unixTimestamp) {
     return `${day} ${time}`;
 }
 
-function formatToBerlinDate(unixTimestamp) {
+function formatToBerlinDate(unixTimestamp : number) {
 	const date = new Date(unixTimestamp * 1000); 
 	return date.toLocaleDateString("de-DE", { 
 		timeZone: "Europe/Berlin",

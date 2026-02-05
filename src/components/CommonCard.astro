@@ -14,7 +14,7 @@ const {
     time = "",
 } = Astro.props;
 
-function formatToBerlinTime(unixTimestamp) {
+function formatToBerlinTime(unixTimestamp: number) {
 	const date = new Date(unixTimestamp * 1000);
 	return date.toLocaleTimeString("de-DE", { 
 		timeZone: "Europe/Berlin",
@@ -24,7 +24,7 @@ function formatToBerlinTime(unixTimestamp) {
 	});
 }
 
-function formatToDayAndTime(unixTimestamp) {
+function formatToDayAndTime(unixTimestamp: number) {
     const date = new Date(unixTimestamp);
     const day = date.toLocaleDateString("de-DE", { 
         timeZone: "Europe/Berlin",
@@ -43,7 +43,7 @@ function formatToDayAndTime(unixTimestamp) {
     return `${day} ${time}`;
 }
 
-function meterToKm(m) {
+function meterToKm(m: number) {
 	//console.log("meterToKm(%d)", m)
 	return Math.round(m / 1000);
 }
@@ -126,7 +126,6 @@ function meterToKm(m) {
             class="flex flex-col justify-center items-center w-full">
             <div class="text-base font-bold">
                 <span>{formatToDayAndTime(time)}</span>
-                <!--<span id="countdown" class="text-[0.25rem]">900</span>-->
             </div>
             
         </div>
