@@ -48,7 +48,7 @@ const currentTimeMinute = time.toLocaleTimeString("de-DE", {
 	timeZone: "Europe/Berlin",
 	minute: "2-digit",
 	hour12: false,
-});
+}).padStart(2, '0');
 
 function formatToDayAndTime(unixTimestamp : number) {
     const date = new Date(unixTimestamp * 1000);
@@ -88,6 +88,7 @@ function matchCriteria(element, index, array) {
 }
 const dailyWeather = forecastData.list.filter(matchCriteria).slice(0,8);
 
+/*
 const hour = new Date().toLocaleTimeString("de-DE", {
 	timeZone: "Europe/Berlin",
 	hour: "2-digit",
@@ -95,6 +96,15 @@ const hour = new Date().toLocaleTimeString("de-DE", {
 });
 const hourNumber = parseInt(hour, 10);
 const isNight = hourNumber >= 20 || hourNumber < 6;
+*/
+var hourSunrise = currentWeather.sys.sunrise * 1000;
+console.log(hourSunrise);
+var hourSunset = currentWeather.sys.sunset * 1000;
+console.log(hourSunset);
+const hour = (new Date()).getTime();
+console.log(hour);
+const isNight = hour > hourSunset || hour < hourSunrise;
+console.log(isNight);
 
 const colors = [
 	"text-red-950", "text-orange-950", "text-amber-950", "text-yellow-950", "text-lime-950", "text-green-950", 
@@ -117,16 +127,10 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 		class="flex flex-col items-center h-screen w-full"
 		style={{
 			backgroundColor: isNight ? "#111927" : "#fdfdfd",
-			//backgroundImage: isNight
-			//	? `radial-gradient(at 50% 50%, hsl(200, 77%, 50%) 0px, transparent 59%),
-            // radial-gradient(at 82% 65%, hsl(218, 39%, 11%) 0px, transparent 55%)`
-			//	: `radial-gradient(at 50% 50%, hsl(45, 100%, 80%) 0px, transparent 59%),
-            // radial-gradient(at 82% 65%, #f5f5f4 0px, transparent 55%)`,
 		}}>
-		<div class="flex flex-col gap-4 w-full">
+		<div class="flex flex-col gap-2 w-full">
 			<!-- date and time  -->
-			<!--<section class="w-full max-w-[1475px] items-center mt-5 mx-auto">-->
-			<section class="w-full max-w-98/100 items-center gap-4 mt-5 mx-auto">
+			<section class="w-full max-w-99/100 items-center gap-2 mt-5 mx-auto">
 				<DatetimeCard 
 					currentDate = {currentDate}
 					currentTime = {currentTime}
@@ -137,7 +141,7 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 			</section>
 
 			<!-- outside, common, inside -->
-			<section class="grid grid-cols-7 w-full max-w-98/100 items-center gap-4 mx-auto">
+			<section class="grid grid-cols-7 w-full max-w-99/100 items-center gap-2 mx-auto">
 				<!-- Outside -->
 				<OutsideCard
 					isNight = {isNight}
@@ -159,7 +163,7 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 			<!-- weather details -->
 			<section
 				class:list={[
-					"w-full flex items-center justify-center shadow-md rounded-lg pl-4 pr-4 max-w-98/100 mx-auto backdrop-blur-lg backdrop-saturate-150 border",
+					"w-full flex items-center justify-center shadow-md rounded-lg pl-4 pr-4 max-w-99/100 mx-auto backdrop-blur-lg backdrop-saturate-150 border",
 					{
 						[`bg-[rgba(17,25,39,0.5)] border-white/10 text-slate-100`]:
 							isNight,
@@ -180,7 +184,7 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 			<!-- forecast -->
 			<section
 				class:list={[
-					"flex gap-4 justify-between w-full max-w-98/100 mx-auto shadow-md rounded-lg p-4 backdrop-blur-lg backdrop-saturate-150 border",
+					"flex gap-2 justify-between w-full max-w-99/100 mx-auto shadow-md rounded-lg p-4 backdrop-blur-lg backdrop-saturate-150 border",
 					/*
 					{
 						[`bg-[rgba(17,25,39,0.5)] border-white/10 ${darkColors[Math.floor(Math.random() * darkColors.length)]}`]:
@@ -229,8 +233,6 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 			const timeMinuteEl = document.getElementById("minute");
 			const datetimeSeparatorEl = document.getElementById("timeseparator");
 
-			console.log("textcolor=",textcolor);
-
 			function updateDatetime() {
 				const time = new Date();
 				const currentDate = time.toLocaleDateString("de-DE", { 
@@ -241,20 +243,14 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 				});
 				const currentTimeHour = time.toLocaleTimeString("de-DE", {
 					hour: "2-digit",
-					//minute: "2-digit",
-					//second: "2-digit",
 					hour12: false,
 				}).substring(0,2).padStart(2, '0');
-				//console.log("currentTimeHour: ",currentTimeHour);
 				const currentTimeMinute = time.toLocaleTimeString("de-DE", {
-					//hour: "2-digit",
 					minute: "2-digit",
-					//second: "2-digit",
 					hour12: false,
 				}).padStart(2, '0');
-				//console.log("currentTimeMinute: ",currentTimeMinute);
 				if (seconds % 2 == 0) {
-					datetimeSeparatorEl.style.color = textcolor;//(isNight ? "white" : "black");
+					datetimeSeparatorEl.style.color = textcolor;
 					dateEl.textContent = `${currentDate}`;
 					timeHourEl.textContent = `${currentTimeHour}`;
 					timeMinuteEl.textContent = `${currentTimeMinute}`;
@@ -264,8 +260,6 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 			}
 			const interval = setInterval(() => {
 				seconds--;
-				//countdownEl.textContent=seconds;
-				//updateCountdown();
 				updateDatetime();
 				if (seconds <= 0) {
 					clearInterval(interval);

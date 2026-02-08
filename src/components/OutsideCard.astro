@@ -15,15 +15,12 @@ const {
 
 const env = import.meta.env;
 const weathernode1 = env.WEATHERNODE1;
-const outsideResponse = await fetch (
-	`${weathernode1}`
-);
+const outsideResponse = await fetch ( `${weathernode1}` );
 const outsideData = await outsideResponse.json();
-console.log("load outside data")
+console.log("OutsideCard time: ", outsideData.time);
 ---
-
 <div id="outside" class:list={[
-        "col-span-3 items-center gap-8 pt-4 shadow-md rounded-lg backdrop-blur-lg backdrop-saturate-150 border h-full justify-center",
+        "col-span-3 items-center gap-2 pt-6 shadow-md rounded-lg backdrop-blur-lg backdrop-saturate-150 border h-full justify-center",
         {
             [`bg-[rgba(17,25,39,0.5)] border-white/10 text-slate-100`]:
                 isNight,
@@ -34,7 +31,7 @@ console.log("load outside data")
     <div class="flex-col items-center justify-evenly self-stretch text-center">
         <!-- outside temp -->
         <div class="">
-            <p class="text-[12rem]/32 font-semibold">
+            <p id="outsideTemp" class="text-[12rem]/32 font-semibold">
                 {parseFloat(outsideData.temp, (outsideData.temp >= 10 ? 3 : 2))}°C
             </p>
         </div>
@@ -46,7 +43,7 @@ console.log("load outside data")
                     <div
                         class="flex flex-col items-start w-full">
                         Gefühlt:
-                        <span class="text-4xl font-bold">
+                        <span id="outsideHeat" class="text-4xl font-bold">
                             {outsideData.heat}°C
                         </span>
                     </div>
@@ -59,7 +56,7 @@ console.log("load outside data")
                     <div
                         class="flex flex-col w-full">
                         Luftfeuchtigkeit:
-                        <span class="text-4xl font-bold">
+                        <span id="outsideHumidity" class="text-4xl font-bold">
                             {outsideData.hum}%
                         </span>
                     </div>
@@ -71,7 +68,7 @@ console.log("load outside data")
                 <div class="flex items-end">
                     <div class="flex flex-col items-center w-full">
                         Luftdruck:
-                        <span class="text-4xl font-bold">
+                        <span id="outsidePressure" class="text-4xl font-bold">
                             {outsideData.pres} hPa
                         </span>
                     </div>
@@ -80,7 +77,7 @@ console.log("load outside data")
         </div>
 
         <!-- battery room date -->
-        <div class="w-full grid grid-cols-5 text-xl gap-x-8 font-semibold pt-8 pl-4 pr-4 content-end">
+        <div class="w-full grid grid-cols-5 text-xl gap-x-4 font-semibold pt-8 pl-4 pr-4 content-end">
             <!-- battery voltage -->
             <div class="flex gap-2 col-span-2 items-start justify-start">
                 { outsideData.soc > 80 ? <span style="color:green"><IconBattery4Filled size={30} /></span> :
@@ -89,7 +86,7 @@ console.log("load outside data")
                     <span style="color:red"><IconBattery1Filled size={30} /></span> }
                 <div
                     class="flex flex-col w-full">
-                    <span class="text-2xl font-bold">
+                    <span id="outsideVoltage" class="text-2xl font-bold">
                         {outsideData.volt}V / {outsideData.soc}%
                     </span>
                 </div>
@@ -105,7 +102,7 @@ console.log("load outside data")
             <div class="flex items-end justify-end gap-2 col-span-2">
                 <div
                     class="flex flex-col justify-end items-end w-full">
-                    <span class="text-s">
+                    <span id="outsideTime" class="text-s">
                         {outsideData.time}
                     </span>
                 </div>
