@@ -1,12 +1,10 @@
 ---
 import {
-	IconDroplet,
-    IconGauge,
-	IconThermometer, 
 	IconBattery1Filled,
 	IconBattery2Filled,
 	IconBattery3Filled,
 	IconBattery4Filled,
+    IconSquareRoundedArrowUp,
 } from "@tabler/icons-react";
 
 const {
@@ -84,6 +82,7 @@ console.log("OutsideCard time: ", outsideData.time);
                     outsideData.soc > 60 ? <span style="color:#ebb134"><IconBattery3Filled size={30} /></span> :
                     outsideData.soc > 40 ? <span style="color:#eb7134"><IconBattery2Filled size={30} /></span> :
                     <span style="color:red"><IconBattery1Filled size={30} /></span> }
+                { outsideData.charging ? <span><IconSquareRoundedArrowUp size={30}/></span> : <span/>}
                 <div
                     class="flex flex-col w-full">
                     <span id="outsideVoltage" class="text-2xl font-bold">
