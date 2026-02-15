@@ -15,7 +15,7 @@ const env = import.meta.env;
 const weathernode1 = env.WEATHERNODE1;
 const outsideResponse = await fetch ( `${weathernode1}` );
 const outsideData = await outsideResponse.json();
-console.log("OutsideCard time: ", outsideData.time);
+//console.log("OutsideCard time: ", outsideData.time);
 ---
 <div id="outside" class:list={[
         "col-span-3 items-center gap-2 pt-6 shadow-md rounded-lg backdrop-blur-lg backdrop-saturate-150 border h-full justify-center",

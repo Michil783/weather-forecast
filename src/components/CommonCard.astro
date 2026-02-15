@@ -2,7 +2,10 @@
 import {
 	IconSunrise,
 	IconSunset,
+    IconWindsock,
 	IconWindsockFilled,
+    IconCompass,
+    IconCompassFilled,
 	IconBinoculars,
 	IconCloud,
     IconClock,
@@ -47,6 +50,14 @@ function meterToKm(m: number) {
 	//console.log("meterToKm(%d)", m)
 	return Math.round(m / 1000);
 }
+
+function degToCompass(num: number) {
+    const val = Math.round((num/22.5)+.5);
+    const arr = ["N","NNO","NO","ONO","O","OSO", "SO", "SSO","S","SSW","SW","WSW","W","WNW","NW","NNW"];
+    console.log("degToCompass(",num,") = \"",arr[(val % 16)],"\"");
+    return arr[(val % 16)];
+}
+
 ---
 
 <div
@@ -82,7 +93,7 @@ function meterToKm(m: number) {
     </div>
     <!-- wind -->
     <div class="flex items-center">
-        <span><IconWindsockFilled size={25} /></span>
+        <span><IconWindsock size={25} /></span>
         <div
             class="flex flex-col justify-center items-center w-full">
             Wind: 
@@ -90,6 +101,17 @@ function meterToKm(m: number) {
                 {currentWeather.wind.speed}<span
                     class="text-xl">m/s</span
                 >
+            </span>
+        </div>
+    </div>
+    <!-- Wind direction -->
+    <div class="flex items-center">
+        <span><IconCompass size={25} /></span>
+        <div
+            class="flex flex-col justify-center items-center w-full">
+            Wind: 
+            <span class="text-xl font-bold">
+                {degToCompass(currentWeather.wind.deg)}
             </span>
         </div>
     </div>

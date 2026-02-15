@@ -98,13 +98,13 @@ const hourNumber = parseInt(hour, 10);
 const isNight = hourNumber >= 20 || hourNumber < 6;
 */
 var hourSunrise = currentWeather.sys.sunrise * 1000;
-console.log(hourSunrise);
+//console.log(hourSunrise);
 var hourSunset = currentWeather.sys.sunset * 1000;
-console.log(hourSunset);
+//console.log(hourSunset);
 const hour = (new Date()).getTime();
-console.log(hour);
+//console.log(hour);
 const isNight = hour > hourSunset || hour < hourSunrise;
-console.log(isNight);
+//console.log(isNight);
 
 const colors = [
 	"text-red-950", "text-orange-950", "text-amber-950", "text-yellow-950", "text-lime-950", "text-green-950", 
