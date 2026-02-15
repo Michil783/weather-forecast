@@ -13,6 +13,7 @@ import {
 
 const {
 	currentWeather,
+    sunData,
     isNight,
     time = "",
 } = Astro.props;
@@ -54,7 +55,7 @@ function meterToKm(m: number) {
 function degToCompass(num: number) {
     const val = Math.round((num/22.5)+.5);
     const arr = ["N","NNO","NO","ONO","O","OSO", "SO", "SSO","S","SSW","SW","WSW","W","WNW","NW","NNW"];
-    console.log("degToCompass(",num,") = \"",arr[(val % 16)],"\"");
+    //console.log("degToCompass(",num,") = \"",arr[(val % 16)],"\"");
     return arr[(val % 16)];
 }
 
@@ -76,7 +77,8 @@ function degToCompass(num: number) {
         <div class="flex flex-col justify-center items-center w-full">
             <!--Sonnenaufgang:-->
             <span class="text-xl font-bold">
-                {formatToBerlinTime(currentWeather.sys.sunrise)}
+                <!--{formatToBerlinTime(currentWeather.sys.sunrise)}-->
+                {sunData.results.sunrise}
             </span>
         </div>
     </div>
@@ -87,7 +89,8 @@ function degToCompass(num: number) {
             class="flex flex-col justify-center items-center w-full">
             <!--Sonnenuntergang: -->
             <span class="text-xl font-bold">
-                {formatToBerlinTime(currentWeather.sys.sunset)}
+                <!--{formatToBerlinTime(currentWeather.sys.sunset)}-->
+                {sunData.results.sunset}
             </span>
         </div>
     </div>

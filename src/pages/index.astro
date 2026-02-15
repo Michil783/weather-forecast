@@ -15,16 +15,6 @@ const country = env.COUNTRY
 Astro.cookies.set("city", city);
 Astro.cookies.set("country", country);
 
-const currentWeatherResponse = await fetch(
-	`https://api.openweathermap.org/data/2.5/weather?zip=${city},${country}&lang=DE&units=metric&appid=${API_KEY}`
-);
-const currentWeather = await currentWeatherResponse.json();
-
-const forecastResponse = await fetch(
-	`https://api.openweathermap.org/data/2.5/forecast?zip=${city},${country}&lang=DE&units=metric&appid=${API_KEY}`
-);
-const forecastData = await forecastResponse.json();
-
 const time = new Date();
 
 const currentDate = time.toLocaleDateString("de-DE", { 
@@ -49,6 +39,48 @@ const currentTimeMinute = time.toLocaleTimeString("de-DE", {
 	minute: "2-digit",
 	hour12: false,
 }).padStart(2, '0');
+
+const currentWeatherResponse = await fetch(
+	`https://api.openweathermap.org/data/2.5/weather?zip=${city},${country}&lang=DE&units=metric&appid=${API_KEY}`
+);
+const currentWeather = await currentWeatherResponse.json();
+
+const forecastResponse = await fetch(
+	`https://api.openweathermap.org/data/2.5/forecast?zip=${city},${country}&lang=DE&units=metric&appid=${API_KEY}`
+);
+const forecastData = await forecastResponse.json();
+
+const currentDateNumber = time.toLocaleDateString("de-DE", { 
+	timeZone: "Europe/Berlin",
+	year: "numeric",
+	month: "numeric",
+	day: "numeric",
+});
+const sunDataResponse = await fetch(
+	`https://api.sunrise-sunset.org/json?lat=${currentWeather.coord.lat}&lng=${currentWeather.coord.lon}&date=${currentDateNumber}&tzid=Europe/Berlin`
+);
+var sunData = await sunDataResponse.json();
+sunData.results.sunrise = convertTime12to24(sunData.results.sunrise);
+sunData.results.sunset = convertTime12to24(sunData.results.sunset)
+//console.log(sunData);
+//console.log(sunData.results.sunrise);
+//console.log(sunData.results.sunset);
+
+function convertTime12to24(time12h: string) {
+	const [time, modifier] = time12h.split(' ');
+	let [hours, minutes, seconds] = time.split(':');
+	var h : number = +hours;
+	if (h == 12) {
+		hours = '00';
+	}
+	if (modifier == 'PM') {
+		hours = ""+(h + 12);
+	} else 	if (h < 10) {
+		hours = `0`+h;
+	}
+	//console.log("convertTime12to24(\"",time12h,"\") = ",hours,":",minutes);
+	return `${hours}:${minutes}:${seconds}`;
+}
 
 function formatToDayAndTime(unixTimestamp : number) {
     const date = new Date(unixTimestamp * 1000);
@@ -150,6 +182,7 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 				<!-- common -->
 				<CommonCard
 					currentWeather = {currentWeather}
+					sunData = {sunData}
 					isNight = {isNight}
 					time = {time}
 				/>
