@@ -50,21 +50,40 @@ const forecastResponse = await fetch(
 );
 const forecastData = await forecastResponse.json();
 
-const currentDateNumber = time.toLocaleDateString("de-DE", { 
-	timeZone: "Europe/Berlin",
-	year: "numeric",
-	month: "numeric",
-	day: "numeric",
-});
+const currentDateNumber = getDate(time);
 const sunDataResponse = await fetch(
 	`https://api.sunrise-sunset.org/json?lat=${currentWeather.coord.lat}&lng=${currentWeather.coord.lon}&date=${currentDateNumber}&tzid=Europe/Berlin`
 );
 var sunData = await sunDataResponse.json();
 sunData.results.sunrise = convertTime12to24(sunData.results.sunrise);
-sunData.results.sunset = convertTime12to24(sunData.results.sunset)
-//console.log(sunData);
-//console.log(sunData.results.sunrise);
-//console.log(sunData.results.sunset);
+sunData.results.sunset = convertTime12to24(sunData.results.sunset);
+// var sunDataArray = [];
+// for( let i = 1; i <= 5; i++) {
+// 	var t = time;
+// 	t.setDate(t.getDate() + 1);	
+// 	var d = getDate(t);
+// 	var sunDataResponses = await fetch(
+// 		`https://api.sunrise-sunset.org/json?lat=${currentWeather.coord.lat}&lng=${currentWeather.coord.lon}&date=${d}&tzid=Europe/Berlin`
+// 	);
+// 	var sunDataResult = await sunDataResponses.json();
+// 	sunDataResult.results.sunrise = convertTime12to24(sunDataResult.results.sunrise);
+// 	sunDataResult.results.sunset = convertTime12to24(sunDataResult.results.sunset);
+// 	sunDataArray.push(sunDataResult);
+// }
+// console.log("sunDataArray length: ", sunDataArray.length);
+// for( let i = 0; i < sunDataArray.length; i++) {
+//	console.log(sunDataArray[i].results.sunrise, sunDataArray[i].results.sunset);
+// }
+
+function getDate(time: Date) {
+	//console.log("getDate(",time,")");
+	return time.toLocaleDateString("de-DE", { 
+		timeZone: "Europe/Berlin",
+		year: "numeric",
+		month: "numeric",
+		day: "numeric",
+	});
+}
 
 function convertTime12to24(time12h: string) {
 	const [time, modifier] = time12h.split(' ');
@@ -160,9 +179,9 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 		style={{
 			backgroundColor: isNight ? "#111927" : "#fdfdfd",
 		}}>
-		<div class="flex flex-col gap-2 w-full">
+		<div class="flex flex-col gap-2 h-12/12 w-full">
 			<!-- date and time  -->
-			<section class="w-full max-w-99/100 items-center gap-2 mt-5 mx-auto">
+			<section class="w-full max-w-99/100 h-2/12 items-center gap-2 mx-auto">
 				<DatetimeCard 
 					currentDate = {currentDate}
 					currentTime = {currentTime}
@@ -173,7 +192,7 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 			</section>
 
 			<!-- outside, common, inside -->
-			<section class="grid grid-cols-7 w-full max-w-99/100 items-center gap-2 mx-auto">
+			<section class="grid grid-cols-7 w-full max-w-99/100 h-3/12 items-center gap-2 mx-auto">
 				<!-- Outside -->
 				<OutsideCard
 					isNight = {isNight}
@@ -196,7 +215,7 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 			<!-- weather details -->
 			<section
 				class:list={[
-					"w-full flex items-center justify-center shadow-md rounded-lg pl-4 pr-4 max-w-99/100 mx-auto backdrop-blur-lg backdrop-saturate-150 border",
+					"w-full flex items-center justify-center shadow-md rounded-lg pl-4 pr-4 max-w-99/100 h-5/12 mt-5 mx-auto backdrop-blur-lg backdrop-saturate-150 border",
 					{
 						[`bg-[rgba(17,25,39,0.5)] border-white/10 text-slate-100`]:
 							isNight,
@@ -217,7 +236,7 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 			<!-- forecast -->
 			<section
 				class:list={[
-					"flex gap-2 justify-between w-full max-w-99/100 mx-auto shadow-md rounded-lg p-4 backdrop-blur-lg backdrop-saturate-150 border",
+					"flex gap-2 justify-between w-full max-w-99/100 h-4/12 mx-auto shadow-md rounded-lg p-4 backdrop-blur-lg backdrop-saturate-150 border",
 					/*
 					{
 						[`bg-[rgba(17,25,39,0.5)] border-white/10 ${darkColors[Math.floor(Math.random() * darkColors.length)]}`]:
