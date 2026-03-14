@@ -29,7 +29,8 @@ const outsideData = await outsideResponse.json();
     <div class="flex-col items-center justify-evenly self-stretch text-center">
         <!-- outside temp -->
         <div class="">
-            <p id="outsideTemp" class="text-[12rem]/32 font-semibold">
+            <!--<p id="outsideTemp" class="text-[12rem]/32 font-semibold">-->
+            <p id="outsideTemp" class="text-[16vh]/[10vh] font-semibold">
                 {parseFloat(outsideData.temp, (outsideData.temp >= 10 ? 3 : 2))}°C
             </p>
         </div>

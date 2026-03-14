@@ -70,7 +70,7 @@ export default function WeatherChart({ labels, temperatureData, precipitationDat
           intersect: false,
         },
         plugins: {
-          legend: { labels: { color: textColor, font: { size: 16 } } },
+          legend: { labels: { color: textColor, font: { size: 20 } } },
           tooltip: {
             backgroundColor: "slategray",
             titleColor: "white",
@@ -81,7 +81,7 @@ export default function WeatherChart({ labels, temperatureData, precipitationDat
           datalabels: {
             color: textColor,
             font: {
-              size: 14,
+              size: 20,
             },
             align: "top",
             offset: 4,
@@ -94,7 +94,7 @@ export default function WeatherChart({ labels, temperatureData, precipitationDat
             ticks: {
               color: textColor,
               font: {
-                size: 16,
+                size: 20,
                 weight: "bold",
               },
               callback: function (val, index) {
@@ -112,7 +112,7 @@ export default function WeatherChart({ labels, temperatureData, precipitationDat
             ticks: {
               color: magenta,
               font : {
-                size: 16,
+                size: 20,
               },
               callback: function (value) {
                 return value + "°C";
@@ -136,11 +136,11 @@ export default function WeatherChart({ labels, temperatureData, precipitationDat
               display: true, 
               text: 'hPa', 
               color: green, 
-              font: { size: 16 } 
+              font: { size: 20 } 
             },
             ticks: { 
               color: green, 
-              font: { size: 16 },
+              font: { size: 20 },
               maxTicksLimit: 7   
             }, 
           }, 
@@ -154,7 +154,7 @@ export default function WeatherChart({ labels, temperatureData, precipitationDat
             ticks: {
               color: blue,
               font: {
-                size: 16,
+                size: 20,
               },
               callback: function (value) {
                 return value + "mm";
@@ -166,12 +166,22 @@ export default function WeatherChart({ labels, temperatureData, precipitationDat
     });
   }, []);
 
+
+//        width: "100%",
+//        height: "480px",
+//        maxHeight: "78%",
+//        borderColor: "black",
+//        borderWidth: 1,
+//        borderStyle: "solid",
+
   return (
     <div
       style={{
         position: "relative",
-        width: "100%",
-        height: "240px",
+        width: "99%",
+        maxWidth: "99%",
+        height: "480px",
+        maxHeight: "90%",
       }}
     >
       <canvas ref={canvasRef}></canvas>
