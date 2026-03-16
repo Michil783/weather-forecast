@@ -87,14 +87,14 @@ const inside2Data = await inside2Response.json();
         </div>
 
         <!-- battery room date -->
-        <div class="w-full grid grid-cols-5 text-xl gap-x-4 font-semibold pl-4 pr-4">
+        <div class="w-full grid grid-cols-5 text-2xl gap-x-4 font-semibold pl-4 pr-4">
             <!-- battery voltage and soc -->
             <div class="flex gap-2 col-span-2 items-start justify-start">
-                { insideData.soc > 80 ? <span style="color:green"><IconBattery4Filled size={30} /></span> :
-                    insideData.soc > 60 ? <span style="color:#ebb134"><IconBattery3Filled size={30} /></span> :
-                    insideData.soc > 40 ? <span style="color:#eb7134"><IconBattery2Filled size={30} /></span> :
-                    <span style="color:red"><IconBattery1Filled size={30} /></span> }
-                { insideData.charging ? <span><IconSquareRoundedArrowUp size={30}/></span> : <span/>}
+                { insideData.soc > 80 ? <span style="color:green"><IconBattery4Filled size={35} /></span> :
+                    insideData.soc > 60 ? <span style="color:#ebb134"><IconBattery3Filled size={35} /></span> :
+                    insideData.soc > 40 ? <span style="color:#eb7134"><IconBattery2Filled size={35} /></span> :
+                    <span style="color:red"><IconBattery1Filled size={35} /></span> }
+                { insideData.charging ? <span><IconSquareRoundedArrowUp size={35}/></span> : <span/>}
                 
                 <div
                     class="flex flex-col w-full">
@@ -107,7 +107,7 @@ const inside2Data = await inside2Response.json();
             <div class="flex gap-2 items-center justify-center">
                 <div
                     class="flex flex-col justify-center items-center w-full">
-                    <span class="text-2xl font-bold">
+                    <span class="text-3xl font-bold">
                         Wohnzimmer
                     </span>
                 </div>
@@ -116,7 +116,7 @@ const inside2Data = await inside2Response.json();
             <div class="flex items-end justify-end gap-2 col-span-2">
                 <div
                     class="flex flex-col justify-end items-end w-full ">
-                    <span class="text-s">
+                    <span class="text-xl">
                         {insideData.time}
                     </span>
                 </div>
@@ -124,16 +124,17 @@ const inside2Data = await inside2Response.json();
         </div>
 
         <!-- battery room date  2nd room -->
-        <div class="w-full grid grid-cols-5 text-xl gap-x-4 font-semibold pl-4 pr-4">
+        <div class="w-full grid grid-cols-5 text-2xl gap-x-4 font-semibold pl-4 pr-4">
             <!-- battery voltage -->
             <div class="flex gap-2 col-span-2 item-start justify-start">
-                { inside2Data.soc > 80 ? <span style="color:green"><IconBattery4Filled size={20} /></span> :
-                    inside2Data.soc > 60 ? <span style="color:#ebb134"><IconBattery3Filled size={20} /></span> :
-                    inside2Data.soc > 40 ? <span style="color:#eb7134"><IconBattery2Filled size={20} /></span> :
-                    <span style="color:red"><IconBattery1Filled size={20} /></span> }
+                { inside2Data.soc > 80 ? <span style="color:green"><IconBattery4Filled size={30} /></span> :
+                    inside2Data.soc > 60 ? <span style="color:#ebb134"><IconBattery3Filled size={30} /></span> :
+                    inside2Data.soc > 40 ? <span style="color:#eb7134"><IconBattery2Filled size={30} /></span> :
+                    <span style="color:red"><IconBattery1Filled size={30} /></span> }
+                { inside2Data.charging ? <span><IconSquareRoundedArrowUp size={30}/></span> : <span/>}
                 <div
                     class="flex flex-col w-full">
-                    <span class="text-base font-bold">
+                    <span class="text-xl font-bold">
                         {inside2Data.volt}V / {inside2Data.soc}% / {inside2Data.temp}°C
                     </span>
                 </div>
@@ -141,7 +142,7 @@ const inside2Data = await inside2Response.json();
             <div class="flex gap-2 item-center justify-center">
                 <div
                     class="flex flex-col justify-center items-center w-full">
-                    <span class="text-base font-bold">
+                    <span class="text-xl font-bold">
                         Schlafzimmer
                     </span>
                 </div>
@@ -150,7 +151,7 @@ const inside2Data = await inside2Response.json();
             <div class="flex items-end justify-end gap-2 col-span-2">
                 <div
                     class="flex flex-col justify-end items-end w-full ">
-                    <span class="text-base">
+                    <span class="text-xl">
                         {inside2Data.time}
                     </span>
                 </div>

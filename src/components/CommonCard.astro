@@ -73,7 +73,7 @@ function degToCompass(num: number) {
     ]}>
     <!-- sunrise -->
     <div class="flex items-center">
-        <span><IconSunrise size={30} /></span>
+        <span><IconSunrise size={35} /></span>
         <div class="flex flex-col justify-center items-center w-full">
             <!--Sonnenaufgang:-->
             <span class="text-2xl font-bold">
@@ -84,7 +84,7 @@ function degToCompass(num: number) {
     </div>
     <!-- sunset -->
     <div class="flex items-center">
-        <span><IconSunset size={30} /></span>
+        <span><IconSunset size={35} /></span>
         <div
             class="flex flex-col justify-center items-center w-full">
             <!--Sonnenuntergang: -->
@@ -96,9 +96,9 @@ function degToCompass(num: number) {
     </div>
     <!-- wind -->
     <div class="flex items-center">
-        <span><IconWindsockFilled size={30} /></span>
+        <span><IconWindsockFilled size={35} /></span>
         <div
-            class="flex flex-col justify-center items-center w-full">
+            class="flex flex-col justify-center items-center w-full text-2xl">
             Wind: 
             <span class="text-2xl font-bold">
                 {currentWeather.wind.speed}<span
@@ -109,9 +109,9 @@ function degToCompass(num: number) {
     </div>
     <!-- Wind direction -->
     <div class="flex items-center">
-        <span><IconCompassFilled size={30} /></span>
+        <span><IconCompassFilled size={35} /></span>
         <div
-            class="flex flex-col justify-center items-center w-full">
+            class="flex flex-col justify-center items-center w-full  text-2xl">
             Wind: 
             <span class="text-2xl font-bold">
                 {degToCompass(currentWeather.wind.deg)}
@@ -120,9 +120,9 @@ function degToCompass(num: number) {
     </div>
     <!-- visibility -->
     <div class="flex items-center">
-        <span><IconBinoculars size={30} /></span>
+        <span><IconBinoculars size={35} /></span>
         <div
-            class="flex flex-col justify-center items-center w-full">
+            class="flex flex-col justify-center items-center w-full text-2xl">
             Sicht: 
             <span class="text-2xl font-bold">
                 {meterToKm(currentWeather.visibility)}<span
@@ -133,9 +133,9 @@ function degToCompass(num: number) {
     </div>
     <!-- clouds -->
     <div class="flex items-center">
-        <span><IconCloud size={30} /></span>
+        <span><IconCloud size={35} /></span>
         <div
-            class="flex flex-col justify-center items-center w-full">
+            class="flex flex-col justify-center items-center w-full text-2xl">
             Wolken: 
             <span class="text-2xl font-bold">
                 {currentWeather.clouds.all}
@@ -146,10 +146,10 @@ function degToCompass(num: number) {
     <div/>
     <!-- time of update -->
     <div class="flex items-center col-span-2">
-        <span><IconClock size={25} /></span>
+        <span><IconClock size={30} /></span>
         <div
             class="flex flex-col justify-center items-center w-full">
-            <div class="text-xl font-bold">
+            <div class="text-2xl font-bold">
                 <span>{formatToDayAndTime(time)}</span>
             </div>
             
