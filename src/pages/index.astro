@@ -45,35 +45,29 @@ const currentWeatherResponse = await fetch(
 );
 const currentWeather = await currentWeatherResponse.json();
 
+//console.log(`https://api.openweathermap.org/data/2.5/forecast?zip=${city},${country}&lang=DE&units=metric&appid=${API_KEY}`);
 const forecastResponse = await fetch(
 	`https://api.openweathermap.org/data/2.5/forecast?zip=${city},${country}&lang=DE&units=metric&appid=${API_KEY}`
 );
 const forecastData = await forecastResponse.json();
 
 const currentDateNumber = getDate(time);
+console.log(`https://api.sunrise-sunset.org/json?lat=${currentWeather.coord.lat}&lng=${currentWeather.coord.lon}&date=${currentDateNumber}&tzid=Europe/Berlin`)
 const sunDataResponse = await fetch(
 	`https://api.sunrise-sunset.org/json?lat=${currentWeather.coord.lat}&lng=${currentWeather.coord.lon}&date=${currentDateNumber}&tzid=Europe/Berlin`
 );
-var sunData = await sunDataResponse.json();
-sunData.results.sunrise = convertTime12to24(sunData.results.sunrise);
-sunData.results.sunset = convertTime12to24(sunData.results.sunset);
-// var sunDataArray = [];
-// for( let i = 1; i <= 5; i++) {
-// 	var t = time;
-// 	t.setDate(t.getDate() + 1);	
-// 	var d = getDate(t);
-// 	var sunDataResponses = await fetch(
-// 		`https://api.sunrise-sunset.org/json?lat=${currentWeather.coord.lat}&lng=${currentWeather.coord.lon}&date=${d}&tzid=Europe/Berlin`
-// 	);
-// 	var sunDataResult = await sunDataResponses.json();
-// 	sunDataResult.results.sunrise = convertTime12to24(sunDataResult.results.sunrise);
-// 	sunDataResult.results.sunset = convertTime12to24(sunDataResult.results.sunset);
-// 	sunDataArray.push(sunDataResult);
-// }
-// console.log("sunDataArray length: ", sunDataArray.length);
-// for( let i = 0; i < sunDataArray.length; i++) {
-//	console.log(sunDataArray[i].results.sunrise, sunDataArray[i].results.sunset);
-// }
+var sunData;
+var sunDataValid = false;
+try {
+	sunData = await sunDataResponse.json();
+	sunData.results.sunrise = convertTime12to24(sunData.results.sunrise);
+	sunData.results.sunset = convertTime12to24(sunData.results.sunset);
+	sunDataValid = true;
+} catch (error) {
+	sunDataValid = false;
+	//sunData.results.sunrise = forecastData.sys.sunrise;
+	//sunData.results.sunset = forecastData.sys.sunset;
+}
 
 function getDate(time: Date) {
 	//console.log("getDate(",time,")");
@@ -202,6 +196,7 @@ const textcolor = isNight ? "oklch(96.8% 0.007 247.896)" : "oklch(20.8% 0.042 26
 				<CommonCard
 					currentWeather = {currentWeather}
 					sunData = {sunData}
+					sunDataValid = {sunDataValid}
 					isNight = {isNight}
 					time = {time}
 				/>

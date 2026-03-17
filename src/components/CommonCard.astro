@@ -14,6 +14,7 @@ import {
 const {
 	currentWeather,
     sunData,
+    sunDataValid,
     isNight,
     time = "",
 } = Astro.props;
@@ -78,7 +79,7 @@ function degToCompass(num: number) {
             <!--Sonnenaufgang:-->
             <span class="text-2xl font-bold">
                 <!--{formatToBerlinTime(currentWeather.sys.sunrise)}-->
-                {sunData.results.sunrise}
+                {sunDataValid?sunData.results.sunrise:""}
             </span>
         </div>
     </div>
@@ -90,7 +91,7 @@ function degToCompass(num: number) {
             <!--Sonnenuntergang: -->
             <span class="text-2xl font-bold">
                 <!--{formatToBerlinTime(currentWeather.sys.sunset)}-->
-                {sunData.results.sunset}
+                {sunDataValid?sunData.results.sunset:""}
             </span>
         </div>
     </div>
