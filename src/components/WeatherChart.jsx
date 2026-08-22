@@ -8,10 +8,14 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 
 const magenta = "rgba(220, 33, 168, 1)";
 const magenta_light = "rgba(221, 33, 168, 0.2)";
-const green = "rgba(30, 184, 36, 1.0)";
-const green_light = "rgba(30, 184, 36, 0.1)";
-const blue = "rgba(54, 162, 235, 1)";
-const blue_light = "rgba(54, 162, 235, 0.5)";
+//const green = "rgba(30, 184, 36, 1.0)";
+//const green_light = "rgba(30, 184, 36, 0.1)";
+//const blue = "rgba(54, 162, 255, 1)";
+//const blue_light = "rgba(54, 162, 255, 0.5)";
+const green = "rgba(30, 140, 50, 1.0)";
+const green_light = "rgba(30, 200, 50, 0.3)";
+const blue = "rgba(20, 20, 255, 1.0)";
+const blue_light = "rgba(20, 120, 255, 0.3)";
 
 Chart.register(...registerables, ChartDataLabels, annotationPlugin);
 

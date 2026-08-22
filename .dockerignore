@@ -2,3 +2,9 @@
 node_modules
 dist
 .env
+weather-forecast.code-workspace
+.vscode
+Dockerfile
+.dockerignore
+.git
+.gitignore
