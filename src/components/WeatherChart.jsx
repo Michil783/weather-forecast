@@ -15,11 +15,13 @@ const magenta_light = "rgba(221, 33, 168, 0.2)";
 const green = "rgba(30, 140, 50, 1.0)";
 const green_light = "rgba(30, 200, 50, 0.3)";
 const blue = "rgba(20, 20, 255, 1.0)";
+const blue_night = "rgba(160, 160, 255, 1.0)";
 const blue_light = "rgba(20, 120, 255, 0.3)";
+const blue_light_night = "rgba(160, 160, 255, 0.3)";
 
 Chart.register(...registerables, ChartDataLabels, annotationPlugin);
 
-export default function WeatherChart({ labels, temperatureData, precipitationData, airPressureData, textColor  }) {
+export default function WeatherChart({ labels, temperatureData, precipitationData, airPressureData, textColor, isNight  }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -46,8 +48,8 @@ export default function WeatherChart({ labels, temperatureData, precipitationDat
             type: 'bar',
             label: "Niederschlag (mm)",
             data: precipitationData,
-            borderColor: blue,
-            backgroundColor: blue_light,
+            borderColor: (isNight ? blue_night : blue),
+            backgroundColor: (isNight ? blue_light_night : blue_light),
             yAxisID: "y-precip",
             barPercentage: 1.0,
             categoryPercentage: 1.0,
@@ -156,7 +158,7 @@ export default function WeatherChart({ labels, temperatureData, precipitationDat
               drawOnChartArea: false,
             },
             ticks: {
-              color: blue,
+              color: (isNight ? blue_night : blue),
               font: {
                 size: 20,
               },
